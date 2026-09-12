@@ -59,18 +59,17 @@ python app.py
 ```
 Then open http://localhost:5001
 
-(Port 5001, not 5000 — macOS's AirPlay Receiver squats on 5000 by default and will intercept requests otherwise.)
-
 ## How it works
 
-1. **Sign up / Log in** — real accounts: passwords are hashed (Werkzeug scrypt) and never stored in plain text; identity is tracked server-side via a signed session cookie, not a client-supplied id.
-2. **Profile** — add skills one at a time with a category (Technology, Art, Music, Languages, Sports, Academics, Cooking, Business, Wellness, Crafts, Writing, Games, or Other), suggested automatically from the skill name but always editable.
-3. **Discover** — every other profile is scored against yours (see `backend/matching.py`) and shown with a match percentage, the specific reasons for it, and category filter pills backed by that same category data.
-4. **Connect** — sends a request; the other person must **Accept** or **Reject** it from their Connections page before a chat opens.
-5. **Connections** — see each connection's teach/learn skills, and chat via the floating 💬 widget available on every page (live-updating, with photo/video attachments and a lightbox viewer).
-6. **Dashboard** — a personalized summary of your skills, top matches, and connection count.
-7. **Showcase** — post a photo or video of your skill in action, shown with your name and a description; delete your own posts anytime.
-8. **Settings** — change your password.
+1. **Home** (logged out) — a public preview of popular profiles with live search and category filters; clicking Connect prompts you to sign up or log in first.
+2. **Sign up / Log in** — real accounts: passwords are hashed (Werkzeug scrypt) and never stored in plain text; identity is tracked server-side via a signed session cookie, not a client-supplied id.
+3. **Profile** — add skills one at a time with a category (Technology, Art, Music, Languages, Sports, Academics, Cooking, Business, Wellness, Crafts, Writing, Games, or Other), suggested automatically from the skill name but always editable.
+4. **Discover** — every other profile is scored against yours (see `backend/matching.py`) and shown with a match percentage, the specific reasons for it, and category filter pills backed by that same category data.
+5. **Connect** — sends a request; the other person must **Accept** or **Reject** it from their Connections page before a chat opens.
+6. **Connections** — see each connection's teach/learn skills and whether they're currently online (a heartbeat-based presence check, not just a login flag), and chat via the floating 💬 widget available on every page (live-updating, with photo/video attachments and a lightbox viewer).
+7. **Dashboard** — a personalized summary of your skills, top matches, and connection count.
+8. **Showcase** — post a photo or video of your skill in action, shown with your name and a description; delete your own posts anytime.
+9. **Settings** — change your password.
 
 ## Attribution
 
