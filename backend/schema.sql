@@ -1,7 +1,3 @@
--- SkillSwap database schema (MySQL) — tables only, no data.
--- Run once against a fresh database: mysql -u root -p skillswap < schema.sql
--- For demo/seed data, see seed_data.sql.
-
 CREATE TABLE IF NOT EXISTS users (
     id                    INT AUTO_INCREMENT PRIMARY KEY,
     name                  VARCHAR(80) NOT NULL,
@@ -17,7 +13,6 @@ CREATE TABLE IF NOT EXISTS users (
     created_at            TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Each row is one skill a user can teach, or one skill they want to learn.
 CREATE TABLE IF NOT EXISTS skills (
     id          INT AUTO_INCREMENT PRIMARY KEY,
     user_id     INT NOT NULL,

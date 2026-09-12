@@ -1,13 +1,3 @@
--- SkillSwap demo/seed data — 13 profiles with real photos and an
--- interconnected web of skills, so Discover/matching/chat all have
--- something to actually demo.
---
--- Run once, after schema.sql:
---   mysql -u root skillswap < schema.sql
---   mysql -u root skillswap < seed_data.sql
---
--- All 13 accounts log in with password: password123
-
 INSERT INTO users (name, email, password_hash, bio, avatar_url) VALUES
     ('Riya', 'riya@skillswap.test', 'scrypt:32768:8:1$08MNvrOMXBoc8kcw$6fb785181591c6d7f79640f1b6255ec00a07a0499df44e81bbe9b0b3a6da5e466f7974276987052430433bf21823e061c36d5c3a58280d8ac36f6ac6f04f68c0', 'Web developer who loves teaching how the web works.', '/static/img/seed/riya.jpg'),
     ('Aarav', 'aarav@skillswap.test', 'scrypt:32768:8:1$08MNvrOMXBoc8kcw$6fb785181591c6d7f79640f1b6255ec00a07a0499df44e81bbe9b0b3a6da5e466f7974276987052430433bf21823e061c36d5c3a58280d8ac36f6ac6f04f68c0', 'Sketching and painting in my free time.', '/static/img/seed/aarav.jpg'),
@@ -23,8 +13,6 @@ INSERT INTO users (name, email, password_hash, bio, avatar_url) VALUES
     ('Neha', 'neha@skillswap.test', 'scrypt:32768:8:1$08MNvrOMXBoc8kcw$6fb785181591c6d7f79640f1b6255ec00a07a0499df44e81bbe9b0b3a6da5e466f7974276987052430433bf21823e061c36d5c3a58280d8ac36f6ac6f04f68c0', 'Classically trained singer and pianist.', '/static/img/seed/neha.jpg'),
     ('Arjun', 'arjun@skillswap.test', 'scrypt:32768:8:1$08MNvrOMXBoc8kcw$6fb785181591c6d7f79640f1b6255ec00a07a0499df44e81bbe9b0b3a6da5e466f7974276987052430433bf21823e061c36d5c3a58280d8ac36f6ac6f04f68c0', 'Polyglot who speaks Spanish and German.', '/static/img/seed/arjun.jpg');
 
--- Joined by name (not assumed IDs), so this is safe to run regardless of
--- how many other users already exist.
 INSERT INTO skills (user_id, skill_name, skill_type, category)
 SELECT id, v.skill_name, v.skill_type, v.category
 FROM users
@@ -70,3 +58,7 @@ JOIN (
     UNION ALL SELECT 'Arjun', 'Basketball', 'learn', 'Sports'
 ) v ON v.name = users.name
 WHERE users.email LIKE '%@skillswap.test';
+
+INSERT INTO showcase_posts (user_id, media_url, media_type, description)
+SELECT id, '/static/video/demo.mp4', 'video', 'A walkthrough of SkillSwap end to end.'
+FROM users WHERE name = 'Riya';

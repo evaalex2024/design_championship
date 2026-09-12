@@ -1,8 +1,3 @@
-"""Real authentication: salted password hashing (Werkzeug's scrypt) and
-server-side sessions. No user id is ever trusted from the client — every
-route that needs "who is this" reads it from the signed session cookie.
-"""
-
 from functools import wraps
 
 from flask import session, jsonify, redirect, url_for
@@ -36,7 +31,6 @@ def current_user():
 
 
 def login_required_api(view):
-    """For JSON API routes: 401 if not logged in."""
     @wraps(view)
     def wrapped(*args, **kwargs):
         if not current_user_id():
@@ -46,7 +40,6 @@ def login_required_api(view):
 
 
 def login_required_page(view):
-    """For page routes: redirect to /login if not logged in."""
     @wraps(view)
     def wrapped(*args, **kwargs):
         if not current_user_id():

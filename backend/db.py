@@ -4,11 +4,6 @@ import config
 
 
 def get_db():
-    """Open a new connection to the MySQL database.
-
-    Each request gets its own connection and closes it when done —
-    simple and easy to reason about for a project this size.
-    """
     return pymysql.connect(
         host=config.DB_HOST,
         user=config.DB_USER,

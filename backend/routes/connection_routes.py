@@ -12,11 +12,6 @@ bp = Blueprint("connections", __name__, url_prefix="/api/connections")
 ATTACHMENT_VIDEO_EXTENSIONS = {"mp4", "webm", "mov"}
 
 
-# Going offline is normally an explicit signal — sendBeacon on tab/window
-# close, or on logout (see auth_routes.py). This threshold is only a
-# fallback for cases where that beacon never arrives (browser crash, force
-# quit, lost network) — generous enough that brief backgrounding /
-# throttled timers between heartbeats never falsely show someone offline.
 ONLINE_THRESHOLD_SECONDS = 90
 
 
@@ -58,7 +53,6 @@ def request_connection():
 @bp.get("/pending")
 @login_required_api
 def list_pending():
-    """Incoming requests where someone else asked to connect with me."""
     me_id = current_user_id()
     db = get_db()
     with db.cursor() as cursor:
@@ -112,7 +106,6 @@ def reject_connection(connection_id):
 @bp.get("")
 @login_required_api
 def list_connections():
-    """My accepted connections only, each annotated with its unread count."""
     me_id = current_user_id()
     db = get_db()
     with db.cursor() as cursor:
@@ -192,8 +185,6 @@ def list_messages(connection_id):
 def send_message(connection_id):
     me_id = current_user_id()
 
-    # Sent as multipart/form-data so a message can carry an attachment,
-    # text, or both — same request either way, one control on the frontend.
     body = (request.form.get("body") or "").strip()
     file = request.files.get("attachment")
 

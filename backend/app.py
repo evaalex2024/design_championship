@@ -21,8 +21,6 @@ app = Flask(
     static_folder=os.path.join(FRONTEND_DIR, "static"),
 )
 
-# A real deployment must set SKILLSWAP_SECRET_KEY to a random, secret value —
-# this fallback exists only so the dev server can start without extra setup.
 app.secret_key = os.environ.get("SKILLSWAP_SECRET_KEY", "dev-only-change-me")
 
 app.register_blueprint(auth_bp)
@@ -35,9 +33,6 @@ app.register_blueprint(showcase_bp)
 
 @app.context_processor
 def inject_current_user():
-    """Makes `current_user` and the Connections notification badge available
-    in every template. The badge combines two things needing attention:
-    incoming connection requests, and unread messages across all chats."""
     user = current_user()
     pending_count = 0
     unread_count = 0

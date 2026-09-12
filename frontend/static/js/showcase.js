@@ -39,8 +39,6 @@ function renderPosts(posts) {
     grid.appendChild(card);
   });
 
-  // Each post contributes exactly one .zoomable element, in the same
-  // order as `posts`, so its index there doubles as the lightbox index.
   const mediaItems = posts.map(p => ({ url: p.media_url, type: p.media_type }));
   grid.querySelectorAll('.zoomable').forEach((el, i) => {
     el.addEventListener('click', () => openLightbox(mediaItems, i));
@@ -64,9 +62,6 @@ let lastPostsSignature = null;
 async function loadShowcase() {
   const posts = await api('/api/showcase');
 
-  // Only re-render when the actual set of posts changed — otherwise a
-  // blind poll-driven re-render would restart anyone's in-progress video
-  // playback every few seconds.
   const signature = posts.map(p => p.id).join(',');
   if (signature === lastPostsSignature) return;
   lastPostsSignature = signature;
@@ -78,9 +73,9 @@ let currentPreviewUrl = null;
 
 function resetUploadArea() {
   const videoEl = document.getElementById('showcasePreviewVideo');
-  videoEl.pause(); // hiding a <video> doesn't stop playback — must pause explicitly
+  videoEl.pause();
   videoEl.removeAttribute('src');
-  videoEl.load(); // drop the buffered media, not just the src reference
+  videoEl.load();
   document.getElementById('showcasePreviewImg').removeAttribute('src');
 
   if (currentPreviewUrl) {
@@ -117,7 +112,7 @@ document.getElementById('media').addEventListener('change', () => {
 });
 
 document.getElementById('showcaseAttachRemove').addEventListener('click', (e) => {
-  e.preventDefault(); // this button sits right after a <label for="media">
+  e.preventDefault();
   resetUploadArea();
 });
 
@@ -128,7 +123,7 @@ function openShowcaseSheet() {
 function closeShowcaseSheet() {
   document.getElementById('showcaseSheet').classList.remove('open');
   document.getElementById('description').value = '';
-  resetUploadArea(); // closing counts as cancel — don't leave a stale staged file
+  resetUploadArea();
 }
 
 document.getElementById('openShowcaseFormBtn').addEventListener('click', openShowcaseSheet);

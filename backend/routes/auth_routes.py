@@ -87,9 +87,6 @@ def me():
 @bp.post("/heartbeat")
 @login_required_api
 def heartbeat():
-    """Called periodically by any open, logged-in page to mark the user as
-    online. Being briefly idle/backgrounded should NOT flip someone offline —
-    only closing the tab/window or logging out should (see /offline)."""
     db = get_db()
     with db.cursor() as cursor:
         cursor.execute("UPDATE users SET last_seen=NOW() WHERE id=%s", (current_user_id(),))
@@ -98,10 +95,6 @@ def heartbeat():
 
 @bp.post("/offline")
 def go_offline():
-    """Sent via navigator.sendBeacon when the tab/window is actually closed
-    or navigated away from. No login_required_api here — sendBeacon can't
-    reliably read a JSON error response anyway, and a logged-out request is
-    simply a no-op."""
     user_id = current_user_id()
     if user_id:
         db = get_db()

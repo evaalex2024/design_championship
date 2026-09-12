@@ -1,5 +1,3 @@
-// Shared helpers used across every page.
-
 function showToast(message) {
   const t = document.getElementById('toast');
   if (!t) return;
@@ -17,14 +15,12 @@ async function api(path, options) {
   return res.json();
 }
 
-// Mobile hamburger menu
 const navToggle = document.getElementById('navToggle');
 const navLinks = document.getElementById('navLinks');
 if (navToggle && navLinks) {
   navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
 }
 
-// Avatar dropdown — My Profile / Settings / Logout, pulled out of the main nav
 const avatarMenuBtn = document.getElementById('avatarMenuBtn');
 const avatarDropdown = document.getElementById('avatarDropdown');
 if (avatarMenuBtn && avatarDropdown) {
@@ -40,7 +36,6 @@ if (avatarMenuBtn && avatarDropdown) {
   });
 }
 
-// Logout is identical everywhere: clear the session, go back to the landing page.
 const logoutLink = document.getElementById('logoutLink');
 if (logoutLink) {
   logoutLink.addEventListener('click', async (e) => {
@@ -50,9 +45,6 @@ if (logoutLink) {
   });
 }
 
-// Custom select — replaces native <select> with a styled dropdown, while
-// keeping the real (hidden) <select> as the source of truth so existing
-// code that reads/sets `.value` on it keeps working unchanged.
 const customSelectRefreshers = {};
 
 function refreshCustomSelect(selectId) {
@@ -107,9 +99,6 @@ function initCustomSelects() {
 
 if (document.querySelector('.custom-select')) initCustomSelects();
 
-// Lightbox — shared by Showcase posts and chat attachments. Call
-// openLightbox(items, index) where items is [{url, type}, ...] and index
-// is which one to show first; Prev/Next then walk that same list.
 let lightboxItems = [];
 let lightboxIndex = 0;
 
@@ -125,7 +114,7 @@ function showLightboxItem(index) {
     img.removeAttribute('src');
     video.src = item.url;
     video.hidden = false;
-    video.play().catch(() => {}); // ignore autoplay-blocked rejections
+    video.play().catch(() => {});
   } else {
     video.pause();
     video.removeAttribute('src');
@@ -146,9 +135,6 @@ function showLightboxItem(index) {
 function openLightbox(items, index) {
   const overlay = document.getElementById('lightboxOverlay');
   if (!overlay) return;
-  // The inline video (chat bubble / Showcase card) that was clicked to get
-  // here keeps playing in the background otherwise — pause every other
-  // video on the page so only the detached lightbox copy plays.
   document.querySelectorAll('video').forEach((v) => {
     if (v.id !== 'lightboxVideo') v.pause();
   });

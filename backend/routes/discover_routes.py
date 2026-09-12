@@ -28,8 +28,6 @@ def _load_users_with_skills():
 
 
 def _matches_filter(entry, search, category):
-    """category filters on the real per-skill category column; the free-text
-    search box still does a plain substring match over skill names."""
     if category and category in CATEGORIES:
         return category in entry["categories"]
     if search:
@@ -70,7 +68,7 @@ def discover():
             continue
         relation = relation_by_user.get(user["id"], {"connection_id": None, "connection_status": None})
         if relation["connection_status"] == "accepted":
-            continue  # already connected — not a prospective match anymore
+            continue
         entry = skills_by_user.get(user["id"], {"teach": [], "learn": [], "categories": set()})
         if not _matches_filter(entry, search, category):
             continue
@@ -82,9 +80,6 @@ def discover():
 
 @bp.get("/public")
 def discover_public():
-    """No login required — used by the logged-out home page. Ranked by
-    popularity (accepted connection count), not match score, since we
-    don't know the visitor's own skills yet."""
     search = (request.args.get("q") or "").strip().lower()
     category = request.args.get("category")
     users, skills_by_user = _load_users_with_skills()

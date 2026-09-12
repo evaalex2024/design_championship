@@ -36,7 +36,7 @@ async function loadPending() {
 
 async function renderMyConnections() {
   const list = document.getElementById('chatList');
-  const connections = await loadWidgetConnections(); // shared with the floating chat widget
+  const connections = await loadWidgetConnections();
   list.innerHTML = '';
   if (connections.length === 0) {
     list.innerHTML = '<p class="muted">No connections yet — go to Discover and connect with someone.</p>';

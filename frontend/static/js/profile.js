@@ -1,6 +1,3 @@
-// Suggests a starting category from a typed skill name — always editable
-// via the dropdown before adding, since the person adding their own skill
-// is the one who actually knows what it is.
 const CATEGORY_KEYWORDS = {
   Technology: ['coding', 'code', 'programming', 'python', 'javascript', 'java', 'c++', 'web', 'html', 'css',
     'software', 'app', 'machine learning', 'artificial intelligence', ' ai', 'data', 'database', 'sql',

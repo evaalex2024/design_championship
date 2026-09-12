@@ -1,13 +1,10 @@
-// Floating chat widget — available on every logged-in page, so chatting
-// never requires navigating to a separate page.
-
 let widgetConnections = [];
 let widgetActiveConnectionId = null;
 let widgetMyId = null;
 let widgetThreadPollTimer = null;
 let lastMessagesSignature = null;
 let widgetBadgePollTimer = null;
-let previousUnreadByConnection = null; // null = not yet baselined
+let previousUnreadByConnection = null;
 
 function notifyNewMessages(connections) {
   if (previousUnreadByConnection === null) {
@@ -102,12 +99,12 @@ async function openWidgetThread(connectionId, other) {
   document.getElementById('chatBackBtn').style.display = 'inline-block';
   document.getElementById('chatWidgetList').style.display = 'none';
   document.getElementById('chatWidgetThread').classList.add('open');
-  document.getElementById('widgetMessages').innerHTML = ''; // empty box = always scrolls to bottom on this first render
-  lastMessagesSignature = null; // force the first render for this thread, even if ids collide with the last one shown
+  document.getElementById('widgetMessages').innerHTML = '';
+  lastMessagesSignature = null;
   document.getElementById('chatWidget').classList.add('open');
 
   await refreshWidgetMessages();
-  loadWidgetConnections(); // messages just got marked read server-side; updates the badge
+  loadWidgetConnections();
 
   if (widgetThreadPollTimer) clearInterval(widgetThreadPollTimer);
   widgetThreadPollTimer = setInterval(refreshWidgetMessages, 3000);
@@ -136,16 +133,10 @@ async function refreshWidgetMessages() {
 
   const messages = await api(`/api/connections/${widgetActiveConnectionId}/messages`);
 
-  // A poll finding nothing new shouldn't touch the DOM at all — rebuilding
-  // identical content every 3s is exactly what causes the visible "blip"
-  // (images re-render, scroll gets recalculated, etc. for no reason).
   const signature = messages.map(m => m.id).join(',');
   if (signature === lastMessagesSignature) return;
   lastMessagesSignature = signature;
 
-  // A background poll shouldn't yank the view back to the bottom if the
-  // user has scrolled up to read older messages — only snap to bottom if
-  // they were already there (which an empty/fresh box always counts as).
   const wasNearBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 60;
 
   box.innerHTML = messages.map((m) => `
@@ -157,9 +148,6 @@ async function refreshWidgetMessages() {
 
   if (wasNearBottom) {
     box.scrollTop = box.scrollHeight;
-    // Images/videos have no known size until they finish loading, so the
-    // box can grow taller *after* the scroll above already ran — re-apply
-    // it once each piece of media actually loads.
     box.querySelectorAll('img, video').forEach((el) => {
       const stickToBottom = () => { box.scrollTop = box.scrollHeight; };
       if (el.tagName === 'IMG') {
@@ -170,9 +158,6 @@ async function refreshWidgetMessages() {
     });
   }
 
-  // Only messages with an attachment render a .zoomable element, in the
-  // same relative order as `messages` — so filtering the same way keeps
-  // each element's index aligned with its lightbox item.
   const mediaItems = messages
     .filter(m => m.attachment_url)
     .map(m => ({ url: m.attachment_url, type: m.attachment_type }));
@@ -251,27 +236,17 @@ document.getElementById('widgetChatInput').addEventListener('keydown', (e) => {
   widgetMyId = me.id;
   await loadWidgetConnections();
 
-  // Tell the server we're active, so other people see us as online.
-  // Being idle/backgrounded should NOT go offline — only actually
-  // closing the tab/window does (handled below via sendBeacon).
   api('/api/auth/heartbeat', { method: 'POST' });
   setInterval(() => api('/api/auth/heartbeat', { method: 'POST' }), 20000);
 
-  // Fires when the tab/window is actually closed (or navigated away from
-  // entirely). sendBeacon is used instead of fetch because it's designed
-  // to reliably complete even as the page is being torn down.
   window.addEventListener('pagehide', () => {
     navigator.sendBeacon('/api/auth/offline');
   });
 
-  // Keep the badge and connections list live for EVERY connection, even
-  // while a specific thread is open — otherwise a message from someone
-  // else never surfaces until you close the active thread.
   widgetBadgePollTimer = setInterval(() => {
     loadWidgetConnections();
   }, 5000);
 
-  // Discover's "Chat with X" link passes ?open=<connection_id> on any page.
   const openId = Number(new URLSearchParams(window.location.search).get('open'));
   if (openId) {
     const target = widgetConnections.find(c => c.connection_id === openId);
