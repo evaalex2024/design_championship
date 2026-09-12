@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}SkillSwap | Share. Learn. Grow.{% endblock %}
+{% block content %}
+<div class="home-hero">
+  <div>
+    <h1>Your skill can be someone's next superpower.</h1>
+    <p class="lead">SkillSwap connects people who can teach what you want to learn, and want to learn what you can teach. Create an account, list your skills, and let the matching engine find your best skill partners.</p>
+    <div class="stack-buttons" style="max-width:340px">
+      <a href="/signup"><button class="btn primary">Create My Account</button></a>
+      <a href="/login"><button class="btn secondary">Log In</button></a>
+    </div>
+  </div>
+
+  <div class="swap-card">
+    <h2 class="swap-card-title">🤝 A simple skill swap</h2>
+    <div class="swap-row">
+      <div class="swap-person">
+        <div class="swap-icon">🎨</div>
+        <b>Drawing</b>
+        <div class="muted">Aarav teaches</div>
+      </div>
+      <div class="swap-arrow">⇄</div>
+      <div class="swap-person">
+        <div class="swap-icon">💻</div>
+        <b>Coding</b>
+        <div class="muted">Riya teaches</div>
+      </div>
+    </div>
+    <p class="muted" style="text-align:center;margin-top:14px">Everyone has something to teach, and something to learn.</p>
+  </div>
+</div>
+
+<section style="margin-top:20px">
+  <h2 style="text-align:center">Discover Skills</h2>
+  <p class="lead" style="text-align:center;margin:0 auto 30px">Search what people are teaching and learning — log in to connect.</p>
+
+  <input type="text" id="publicSearch" placeholder="Search a skill..." style="max-width:400px;margin:0 auto 8px;display:block;padding:13px;border:1px solid #A65E46;border-radius:10px;font-size:15px;width:100%">
+
+  <div class="categories" id="publicCategories" style="justify-content:center">
+    <button class="category-pill active" data-category="">All</button>
+    <button class="category-pill" data-category="Technology">Technology</button>
+    <button class="category-pill" data-category="Art">Art</button>
+    <button class="category-pill" data-category="Music">Music</button>
+    <button class="category-pill" data-category="Languages">Languages</button>
+    <button class="category-pill" data-category="Sports">Sports</button>
+    <button class="category-pill" data-category="Academics">Academics</button>
+    <button class="category-pill" data-category="Cooking">Cooking</button>
+    <button class="category-pill" data-category="Business">Business</button>
+    <button class="category-pill" data-category="Wellness">Wellness</button>
+    <button class="category-pill" data-category="Crafts">Crafts</button>
+    <button class="category-pill" data-category="Writing">Writing</button>
+    <button class="category-pill" data-category="Games">Games</button>
+    <button class="category-pill" data-category="Other">Other</button>
+  </div>
+
+  <div class="grid" id="publicResults"></div>
+</section>
+
+<div class="modal-overlay" id="authModal">
+  <div class="modal-box">
+    <button class="modal-close" id="authModalClose">×</button>
+    <h3 id="authModalTitle">Join SkillSwap to connect</h3>
+    <p class="muted" style="margin-bottom:20px">Create a free account or log in to send a connection request.</p>
+    <div class="stack-buttons">
+      <a href="/signup"><button class="btn primary">Sign Up</button></a>
+      <a href="/login"><button class="btn secondary">Log In</button></a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/home.js') }}"></script>
+{% endblock %}

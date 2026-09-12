@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | SkillSwap{% endblock %}
+{% block content %}
+<h1>Welcome back, {{ current_user.name }} 👋</h1>
+
+<div class="dash-summary-bar">
+  <span><b>Teach:</b> {% for s in my_teach %}{{ s }}{% if not loop.last %}, {% endif %}{% else %}<span class="muted">None listed</span>{% endfor %}</span>
+  <span><b>Learn:</b> {% for s in my_learn %}{{ s }}{% if not loop.last %}, {% endif %}{% else %}<span class="muted">None listed</span>{% endfor %}</span>
+  <span><b>{{ connection_count }}</b> connection{{ '' if connection_count == 1 else 's' }}</span>
+  <a href="/profile">Edit Profile →</a>
+  <a href="/connections">View Connections →</a>
+</div>
+
+<h3 style="margin-top:28px">Top Matches For You</h3>
+{% if top_matches %}
+<div class="grid">
+  {% for m in top_matches %}
+  <div class="card">
+    <span class="match-badge match-{{ 'excellent' if m.match.percent >= 70 else ('good' if m.match.percent >= 40 else 'partial') }}">{{ m.match.percent }}% {{ m.match.label }}</span>
+    <div class="card-top">
+      <img class="avatar" src="{{ m.avatar_url or url_for('static', filename='img/default-avatar.svg') }}" alt="{{ m.name }}">
+      <div><h3>{{ m.name }}</h3></div>
+    </div>
+    <ul class="match-reasons">
+      {% for r in m.match.reasons %}<li>✓ {{ r }}</li>{% endfor %}
+    </ul>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p class="muted">No matches yet — make sure your profile lists what you can teach and want to learn, then check Discover.</p>
+{% endif %}
+<a href="/discover"><button class="btn primary" style="margin-top:20px">Explore All Matches</button></a>
+{% endblock %}

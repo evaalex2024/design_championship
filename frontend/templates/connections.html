@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Connections | SkillSwap{% endblock %}
+{% block content %}
+<h2>Connection Requests</h2>
+<div class="chat-list" id="pendingList"></div>
+
+<h2 style="margin-top:35px">My Connections</h2>
+<p class="lead">Click a connection to chat — the 💬 button in the corner works from any page too.</p>
+<div class="chat-list" id="chatList"></div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/connections.js') }}"></script>
+{% endblock %}

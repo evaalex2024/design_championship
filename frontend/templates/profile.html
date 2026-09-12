@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% block title %}My Profile | SkillSwap{% endblock %}
+{% block content %}
+<h2>My Profile</h2>
+<p class="lead">Signed in as <b>{{ current_user.name }}</b>. This is what other members see, and what the matching engine uses to find your best skill partners.</p>
+
+<div style="max-width:600px;margin:0 auto">
+<div class="avatar-upload">
+  <img class="avatar avatar-lg" id="avatarPreview" src="{{ current_user.avatar_url or url_for('static', filename='img/default-avatar.svg') }}" alt="Your photo">
+  <div>
+    <button class="btn secondary" type="button" id="changePhotoBtn">📷 Change Photo</button>
+    <input type="file" id="photoInput" accept="image/*" style="display:none">
+    <p class="muted" style="margin-top:6px">JPG, PNG, GIF or WEBP.</p>
+  </div>
+</div>
+
+<form class="stack" id="profileForm">
+  <textarea id="bio" placeholder="Short bio (optional)"></textarea>
+
+  <label class="field-label">Skill level</label>
+  <div class="custom-select" data-select-for="experience_level">
+    <button type="button" class="custom-select-trigger">
+      <span class="custom-select-label"></span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="custom-select-chevron"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </button>
+    <div class="custom-select-options">
+      <div class="custom-select-option" data-value="">Prefer not to say</div>
+      <div class="custom-select-option" data-value="Beginner">Beginner</div>
+      <div class="custom-select-option" data-value="Intermediate">Intermediate</div>
+      <div class="custom-select-option" data-value="Advanced">Advanced</div>
+    </div>
+  </div>
+  <select id="experience_level" hidden>
+    <option value="">Prefer not to say</option>
+    <option value="Beginner">Beginner</option>
+    <option value="Intermediate">Intermediate</option>
+    <option value="Advanced">Advanced</option>
+  </select>
+
+  <label class="field-label">Availability</label>
+  <div class="custom-select" data-select-for="availability">
+    <button type="button" class="custom-select-trigger">
+      <span class="custom-select-label"></span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="custom-select-chevron"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </button>
+    <div class="custom-select-options">
+      <div class="custom-select-option" data-value="">Not specified</div>
+      <div class="custom-select-option" data-value="Weekdays">Weekdays</div>
+      <div class="custom-select-option" data-value="Weekends">Weekends</div>
+      <div class="custom-select-option" data-value="Evenings">Evenings</div>
+      <div class="custom-select-option" data-value="Flexible">Flexible</div>
+    </div>
+  </div>
+  <select id="availability" hidden>
+    <option value="">Not specified</option>
+    <option value="Weekdays">Weekdays</option>
+    <option value="Weekends">Weekends</option>
+    <option value="Evenings">Evenings</option>
+    <option value="Flexible">Flexible</option>
+  </select>
+
+  <label class="field-label">Learning preference</label>
+  <div class="custom-select" data-select-for="learning_preference">
+    <button type="button" class="custom-select-trigger">
+      <span class="custom-select-label"></span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="custom-select-chevron"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </button>
+    <div class="custom-select-options">
+      <div class="custom-select-option" data-value="">Not specified</div>
+      <div class="custom-select-option" data-value="In-person">In-person</div>
+      <div class="custom-select-option" data-value="Online">Online</div>
+      <div class="custom-select-option" data-value="Either">Either</div>
+    </div>
+  </div>
+  <select id="learning_preference" hidden>
+    <option value="">Not specified</option>
+    <option value="In-person">In-person</option>
+    <option value="Online">Online</option>
+    <option value="Either">Either</option>
+  </select>
+
+  <input type="text" id="interests" placeholder="Other interests, comma separated (e.g. Hiking, Board Games)">
+
+  <label class="field-label">Skills you can teach</label>
+  <div class="skill-input-row">
+    <input type="text" id="teachNameInput" placeholder="e.g. Guitar">
+    <div class="custom-select" data-select-for="teachCategorySelect">
+      <button type="button" class="custom-select-trigger">
+        <span class="custom-select-label"></span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="custom-select-chevron"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+      <div class="custom-select-options">
+        <div class="custom-select-option" data-value="Technology">Technology</div>
+        <div class="custom-select-option" data-value="Art">Art</div>
+        <div class="custom-select-option" data-value="Music">Music</div>
+        <div class="custom-select-option" data-value="Languages">Languages</div>
+        <div class="custom-select-option" data-value="Sports">Sports</div>
+        <div class="custom-select-option" data-value="Academics">Academics</div>
+        <div class="custom-select-option" data-value="Cooking">Cooking</div>
+        <div class="custom-select-option" data-value="Business">Business</div>
+        <div class="custom-select-option" data-value="Wellness">Wellness</div>
+        <div class="custom-select-option" data-value="Crafts">Crafts</div>
+        <div class="custom-select-option" data-value="Writing">Writing</div>
+        <div class="custom-select-option" data-value="Games">Games</div>
+        <div class="custom-select-option" data-value="Other">Other</div>
+      </div>
+    </div>
+    <select id="teachCategorySelect" hidden>
+      <option value="Technology">Technology</option>
+      <option value="Art">Art</option>
+      <option value="Music">Music</option>
+      <option value="Languages">Languages</option>
+      <option value="Sports">Sports</option>
+      <option value="Academics">Academics</option>
+      <option value="Cooking">Cooking</option>
+      <option value="Business">Business</option>
+      <option value="Wellness">Wellness</option>
+      <option value="Crafts">Crafts</option>
+      <option value="Writing">Writing</option>
+      <option value="Games">Games</option>
+      <option value="Other">Other</option>
+    </select>
+    <button type="button" class="btn primary" id="teachAddBtn">+ Add</button>
+  </div>
+  <div class="skill-chip-list" id="teachChipList"></div>
+
+  <label class="field-label">Skills you want to learn</label>
+  <div class="skill-input-row">
+    <input type="text" id="learnNameInput" placeholder="e.g. Coding">
+    <div class="custom-select" data-select-for="learnCategorySelect">
+      <button type="button" class="custom-select-trigger">
+        <span class="custom-select-label"></span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="custom-select-chevron"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+      <div class="custom-select-options">
+        <div class="custom-select-option" data-value="Technology">Technology</div>
+        <div class="custom-select-option" data-value="Art">Art</div>
+        <div class="custom-select-option" data-value="Music">Music</div>
+        <div class="custom-select-option" data-value="Languages">Languages</div>
+        <div class="custom-select-option" data-value="Sports">Sports</div>
+        <div class="custom-select-option" data-value="Academics">Academics</div>
+        <div class="custom-select-option" data-value="Cooking">Cooking</div>
+        <div class="custom-select-option" data-value="Business">Business</div>
+        <div class="custom-select-option" data-value="Wellness">Wellness</div>
+        <div class="custom-select-option" data-value="Crafts">Crafts</div>
+        <div class="custom-select-option" data-value="Writing">Writing</div>
+        <div class="custom-select-option" data-value="Games">Games</div>
+        <div class="custom-select-option" data-value="Other">Other</div>
+      </div>
+    </div>
+    <select id="learnCategorySelect" hidden>
+      <option value="Technology">Technology</option>
+      <option value="Art">Art</option>
+      <option value="Music">Music</option>
+      <option value="Languages">Languages</option>
+      <option value="Sports">Sports</option>
+      <option value="Academics">Academics</option>
+      <option value="Cooking">Cooking</option>
+      <option value="Business">Business</option>
+      <option value="Wellness">Wellness</option>
+      <option value="Crafts">Crafts</option>
+      <option value="Writing">Writing</option>
+      <option value="Games">Games</option>
+      <option value="Other">Other</option>
+    </select>
+    <button type="button" class="btn primary" id="learnAddBtn">+ Add</button>
+  </div>
+  <div class="skill-chip-list" id="learnChipList"></div>
+
+  <button class="btn primary" type="submit">Save My Profile</button>
+</form>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock %}

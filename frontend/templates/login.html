@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Log In | SkillSwap{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <h1>Welcome back</h1>
+  <p class="lead">Log in to see your matches and connections.</p>
+  <form class="stack" id="loginForm">
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button class="btn primary" type="submit">Log In</button>
+  </form>
+  <p class="muted" style="margin-top:14px">No account yet? <a href="/signup">Sign up</a></p>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

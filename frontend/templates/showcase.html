@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Showcase | SkillSwap{% endblock %}
+{% block content %}
+<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:28px">
+  <div>
+    <h2 style="margin-bottom:4px">Showcase Your Skills</h2>
+    <p class="lead" style="margin:0">See what the community is sharing.</p>
+  </div>
+  <button class="btn primary" type="button" id="openShowcaseFormBtn">📤 Add Your Post</button>
+</div>
+
+<div class="grid" id="showcaseGrid"></div>
+
+<div class="sheet-overlay" id="showcaseSheet">
+  <div class="sheet-panel">
+    <div class="sheet-handle"></div>
+    <button class="sheet-close" id="showcaseSheetClose" aria-label="Close">×</button>
+    <h3 style="margin-bottom:18px">Post a photo or video</h3>
+
+    <form id="showcaseForm" enctype="multipart/form-data">
+      <input type="file" id="media" accept="image/*,video/*" style="display:none">
+
+      <label class="upload-dropzone" id="showcaseDropzone" for="media">
+        <div id="showcaseDropzoneEmpty">
+          <div class="upload-icon">📷</div>
+          <b>Add a photo or video</b>
+          <span class="required-tag">Required</span>
+          <p class="muted" style="margin-top:6px">Click to choose a file</p>
+        </div>
+        <div id="showcaseDropzonePreview" hidden>
+          <img id="showcasePreviewImg" class="upload-preview-media" hidden alt="Selected preview">
+          <video id="showcasePreviewVideo" class="upload-preview-media" controls hidden></video>
+          <div id="showcasePreviewName" class="muted"></div>
+        </div>
+      </label>
+      <button type="button" id="showcaseAttachRemove" class="btn" hidden style="background:#A65E46;color:#02000D;margin-bottom:16px">Remove Photo/Video</button>
+
+      <label class="field-label" for="description" style="display:block;margin-bottom:8px">Description (optional)</label>
+      <textarea id="description" placeholder="Describe what you're showing..." rows="4" style="width:100%;padding:14px;border:1px solid #A65E46;border-radius:10px;font-size:15px;font-family:inherit;resize:vertical;margin-bottom:16px"></textarea>
+
+      <button class="btn primary" type="submit" id="showcaseSubmitBtn" disabled style="width:100%">📤 Post</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/showcase.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+venv/
+.DS_Store
+*.log
+.env
+
+# Uploaded photos/videos (Showcase posts, chat attachments, profile photos)
+# are runtime user content, not source — keep the folder, not its contents.
+frontend/static/uploads/*
+!frontend/static/uploads/.gitkeep

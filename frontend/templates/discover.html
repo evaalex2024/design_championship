@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Discover | SkillSwap{% endblock %}
+{% block content %}
+<h2>Discover & Match</h2>
+<p class="lead">Every profile below is scored against yours — highest compatibility first.</p>
+
+<input type="text" id="search" placeholder="Search a skill..." style="margin-bottom:8px;padding:13px;border:1px solid #A65E46;border-radius:10px;font-size:15px;width:100%">
+
+<div class="categories" id="categories">
+  <button class="category-pill active" data-category="">All</button>
+  <button class="category-pill" data-category="Technology">Technology</button>
+  <button class="category-pill" data-category="Art">Art</button>
+  <button class="category-pill" data-category="Music">Music</button>
+  <button class="category-pill" data-category="Languages">Languages</button>
+  <button class="category-pill" data-category="Sports">Sports</button>
+  <button class="category-pill" data-category="Academics">Academics</button>
+  <button class="category-pill" data-category="Cooking">Cooking</button>
+  <button class="category-pill" data-category="Business">Business</button>
+  <button class="category-pill" data-category="Wellness">Wellness</button>
+  <button class="category-pill" data-category="Crafts">Crafts</button>
+  <button class="category-pill" data-category="Writing">Writing</button>
+  <button class="category-pill" data-category="Games">Games</button>
+  <button class="category-pill" data-category="Other">Other</button>
+</div>
+
+<div class="grid" id="results"></div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/discover.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}SkillSwap{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<header>
+<nav>
+  <a href="{{ '/dashboard' if current_user else '/' }}" class="logo">Skill<span>Swap</span> ✦</a>
+
+  <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+
+  <ul class="navlinks" id="navLinks">
+    <li><a href="{{ '/dashboard' if current_user else '/' }}">Home</a></li>
+    {% if current_user %}
+      <li><a href="/discover">Discover</a></li>
+      <li><a href="/connections">Connections
+        {% if pending_count %}<span class="badge-count">{{ pending_count }}</span>{% endif %}
+      </a></li>
+      <li><a href="/showcase">Showcase</a></li>
+      <li class="nav-user" id="navUserMenu">
+        <button class="avatar-menu-trigger" id="avatarMenuBtn" aria-label="Account menu" aria-haspopup="true">
+          <img class="avatar avatar-sm" src="{{ current_user.avatar_url or url_for('static', filename='img/default-avatar.svg') }}" alt="{{ current_user.name }}">
+        </button>
+        <div class="avatar-dropdown" id="avatarDropdown">
+          <a href="/profile">
+            <svg class="dropdown-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            My Profile
+          </a>
+          <a href="/settings">
+            <svg class="dropdown-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            Settings
+          </a>
+          <a href="#" id="logoutLink">
+            <svg class="dropdown-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            Logout
+          </a>
+        </div>
+      </li>
+    {% else %}
+      <li><a href="/login">Log In</a></li>
+      <li><a href="/signup" class="nav-cta">Sign Up</a></li>
+    {% endif %}
+  </ul>
+</nav>
+</header>
+
+<main>
+{% block content %}{% endblock %}
+</main>
+
+<footer>
+  <b>SkillSwap ✦</b><br>
+  Share. Learn. Grow.
+  <p class="attribution">Built with Flask + MySQL.</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<div class="lightbox-overlay" id="lightboxOverlay">
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous">‹</button>
+  <div class="lightbox-content">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">×</button>
+    <span class="lightbox-counter" id="lightboxCounter"></span>
+    <img id="lightboxImg" hidden>
+    <video id="lightboxVideo" controls hidden></video>
+  </div>
+  <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next">›</button>
+</div>
+
+{% if current_user %}
+<button class="chat-fab" id="chatFab" aria-label="Messages">
+  💬
+  {% if unread_count %}<span class="badge-count" id="chatFabBadge">{{ unread_count }}</span>{% endif %}
+</button>
+
+<div class="chat-widget" id="chatWidget">
+  <div class="chat-widget-header">
+    <button id="chatBackBtn" style="display:none">←</button>
+    <b id="chatWidgetTitle">Messages</b>
+    <button id="chatWidgetClose">×</button>
+  </div>
+  <div class="chat-widget-list" id="chatWidgetList"></div>
+  <div class="chat-widget-thread" id="chatWidgetThread">
+    <div class="chat-messages" id="widgetMessages"></div>
+    <div class="attach-preview" id="attachPreview" hidden>
+      <span id="attachPreviewName"></span>
+      <button type="button" id="attachRemoveBtn" aria-label="Remove attachment">×</button>
+    </div>
+    <div class="chat-input">
+      <input type="file" id="widgetAttachInput" accept="image/*,video/*" style="display:none">
+      <button type="button" id="widgetAttachBtn" class="chat-icon-btn" title="Attach a photo or video">📎</button>
+      <input type="text" id="widgetChatInput" placeholder="Type a message...">
+      <button type="button" id="widgetSendBtn" class="chat-icon-btn chat-icon-btn-send" title="Send">➤</button>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% if current_user %}
+<script src="{{ url_for('static', filename='js/chat-widget.js') }}"></script>
+{% endif %}
+{% block scripts %}{% endblock %}
+</body>
+</html>
