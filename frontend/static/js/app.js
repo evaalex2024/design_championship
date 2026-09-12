@@ -146,6 +146,12 @@ function showLightboxItem(index) {
 function openLightbox(items, index) {
   const overlay = document.getElementById('lightboxOverlay');
   if (!overlay) return;
+  // The inline video (chat bubble / Showcase card) that was clicked to get
+  // here keeps playing in the background otherwise — pause every other
+  // video on the page so only the detached lightbox copy plays.
+  document.querySelectorAll('video').forEach((v) => {
+    if (v.id !== 'lightboxVideo') v.pause();
+  });
   lightboxItems = items;
   showLightboxItem(index);
   overlay.classList.add('open');

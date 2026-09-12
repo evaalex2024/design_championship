@@ -5,6 +5,9 @@ venv/
 *.log
 .env
 
+# Demo/automation tooling (Playwright scripts, recordings) — not part of the submission
+tools/
+
 # Uploaded photos/videos (Showcase posts, chat attachments, profile photos)
 # are runtime user content, not source — keep the folder, not its contents.
 frontend/static/uploads/*
