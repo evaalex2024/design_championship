@@ -33,7 +33,8 @@ def current_user():
 def login_required_api(view):
     @wraps(view)
     def wrapped(*args, **kwargs):
-        if not current_user_id():
+        if not current_user():
+            session.clear()
             return jsonify({"error": "You must be logged in."}), 401
         return view(*args, **kwargs)
     return wrapped
@@ -42,7 +43,8 @@ def login_required_api(view):
 def login_required_page(view):
     @wraps(view)
     def wrapped(*args, **kwargs):
-        if not current_user_id():
+        if not current_user():
+            session.clear()
             return redirect(url_for("login_page"))
         return view(*args, **kwargs)
     return wrapped
