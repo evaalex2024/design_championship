@@ -74,4 +74,4 @@ Then open http://localhost:5001
 ## Attribution
 
 - The 13 seed demo profiles' photos (`frontend/static/img/seed/`) were sourced from [pravatar.cc](https://pravatar.cc) and downloaded locally. Real accounts use a photo you upload yourself, or an original default silhouette icon (`frontend/static/img/default-avatar.svg`, hand-authored for this project).
-- Built with Flask (Python) and MySQL.
+- Built with HTML, CSS, JavaScript, Python (Flask), and MySQL.
